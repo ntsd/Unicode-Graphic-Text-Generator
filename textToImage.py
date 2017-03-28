@@ -26,7 +26,9 @@ def textToImageExample():#Only Ascii
     img.show()
     #img.save("seesharp.png")
 
-
+def getBinaryOfUnicode():
+    char = "▀"
+    
 
 if __name__ == '__main__':
     textToImageExample()
