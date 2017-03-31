@@ -1,7 +1,7 @@
 
 class CodeSet:
 
-    def __init__(self, name, charSet, fontPATH='fonts/unifont.ttf'):
+    def __init__(self, name, charSet, blockSizeRange, fontPATH='fonts/unifont.ttf'):
         """
         
         :param name : Name of Codeset
@@ -11,3 +11,4 @@ class CodeSet:
         self.name = name
         self.charSet = charSet
         self.fontPATH = fontPATH
+        self.blockSizeRange = blockSizeRange

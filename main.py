@@ -5,6 +5,8 @@ import cv2
 
 import time
 
+import io
+
 from CodeSet import CodeSet
 
 import textToImage
@@ -52,32 +54,22 @@ def blockshaped(arr, nrows, ncols):
             .swapaxes(1,2)
             .reshape(-1, nrows, ncols))
 
-@timing
-def blockshapedOld(arr, nrows, ncols):
-    imageList = []
-    for col in range(width//nrows):
-        for row in range(height//ncols):
-            imageList.append([c[row*scale:row*scale+scale]for c in image[col*scale:col*scale+scale]])
-    return imageList
-
 if __name__ == '__main__':
     filename = askopenfilename()
-    lineSize = 128#28
     image = cv2.imread(filename, 0)
     height, width = image.shape
+    lineSize = width#28
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
     print("size = ", width, "x",  height, " scale = ", scaleWidth)
 
     #speed test
-    #l1 = blockshapedOld(image, scale, scale)
     l2 = slicer(image, scaleHeight, scaleWidth)
 
-    charSet = [chr(i) for i in range(0x1000, 0x3000)]##(0x2580, 0x259F)]
+    charSet = [chr(i) for i in [0x2591, 0x2588, 2592, 2593]]#range(0x2591, 0x2593)]
     codeset = CodeSet("block", charSet, 'fonts/unifont.ttf')
 
     codeSetImageArrays = textToImage.codeSetToImageGenerate(codeset, scaleHeight)
-
 
     minCodeList = []
     for imageBlock in l2:#780
@@ -97,12 +89,16 @@ if __name__ == '__main__':
         minCodeList.append(minCode)
 
 
-    print(len(minCodeList))
-    for i, v in enumerate(minCodeList):
-        if i%lineSize == 0:
-            print()
-        print(charSet[v], end="")
+    print("len(minCodeList)=",len(minCodeList))
 
+    out = ""
+    for i, v in enumerate(minCodeList):
+        if i % lineSize == 0:
+            out += "\n"
+        out += charSet[v]
+
+    with io.open("output.txt", 'w', encoding='utf-8') as file:
+        file.write(out)
 
     # print(len(l2[0]), len(l2[0][0]))
     # print(len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))

@@ -39,6 +39,7 @@ def codeSetToImageGenerate(codeSet, size):
     font = ImageFont.truetype(codeSet.fontPATH , fontSize, encoding="unicode")
     fontColor = 0
     background = 255
+    widthSize = size//2
     # maxH = 0
     # maxW = 0
     # minH = 99
@@ -46,11 +47,14 @@ def codeSetToImageGenerate(codeSet, size):
 
     for i in codeSet.charSet:
         char = i
-        # img = Image.new('L', (1, 1))
-        # draw = ImageDraw.Draw(img)
-        # textSize = draw.textsize(char, font) #size w, h 10,5 in font unifont
+        img = Image.new('L', (1, 1))
+        draw = ImageDraw.Draw(img)
+        textSize = draw.textsize(char, font) #size w, h 10,5 in font unifont
+        if textSize[0] == size:
+            pass
 
-        img = Image.new('L', (size//2, size), background)
+
+        img = Image.new('L', (widthSize, size), background)
         draw = ImageDraw.Draw(img)
         draw.text((0, 0), char, fontColor, font)
 
@@ -61,14 +65,15 @@ def codeSetToImageGenerate(codeSet, size):
 
         imageArrays = list(img.getdata())
 
-        widthSize = size//2
+
         # print(size//2, size)
         codeImages.append([imageArrays[widthSize*i:widthSize*i+widthSize] for i in range(size)])
 
         # print(textSize)
 
-        # img.save("codeset/" + codeSet.name + "/" + char + ".png")
+        img.save("codeset/" + codeSet.name + "/" + char + ".png")
 
+    print("textSize=",textSize, "fontSize=",fontSize)
     # print(maxW, maxH,  minW ,minH )
     return codeImages
 
