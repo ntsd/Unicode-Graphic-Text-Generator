@@ -50,8 +50,9 @@ def codeSetToImageGenerate(codeSet, size):
         img = Image.new('L', (1, 1))
         draw = ImageDraw.Draw(img)
         textSize = draw.textsize(char, font) #size w, h 10,5 in font unifont
-        if textSize[0] == size:
-            pass
+
+        if abs(textSize[0]-widthSize) > 3 or abs(textSize[1]-size) > 3:#to filter if size less than normal
+            continue
 
 
         img = Image.new('L', (widthSize, size), background)
@@ -66,14 +67,14 @@ def codeSetToImageGenerate(codeSet, size):
         imageArrays = list(img.getdata())
 
 
-        # print(size//2, size)
+        #print(size//2, size)
         codeImages.append([imageArrays[widthSize*i:widthSize*i+widthSize] for i in range(size)])
 
-        # print(textSize)
+        #print(textSize, widthSize, size)
 
         img.save("codeset/" + codeSet.name + "/" + char + ".png")
 
-    print("textSize=",textSize, "fontSize=",fontSize)
+    print("textSize=", textSize, "fontSize=",fontSize)
     # print(maxW, maxH,  minW ,minH )
     return codeImages
 
