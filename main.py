@@ -58,21 +58,21 @@ if __name__ == '__main__':
     filename = askopenfilename()
     image = cv2.imread(filename, 0)
     height, width = image.shape
-    lineSize = width#28
+    lineSize = 100 #28 for Facebook
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
-    print("size = ", width, "x",  height, " scale = ", scaleWidth)
+    print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
 
     #speed test
-    l2 = slicer(image, scaleHeight, scaleWidth)
+    splitImage = slicer(image, scaleHeight, scaleWidth)
 
     charSet = [chr(i) for i in [0x2591, 0x2588, 2592, 2593]]#range(0x2591, 0x2593)]
     codeset = CodeSet("block", charSet, 'fonts/unifont.ttf')
 
     codeSetImageArrays = textToImage.codeSetToImageGenerate(codeset, scaleHeight)
 
-    minCodeList = []
-    for imageBlock in l2:#780
+    out = ""
+    for i, imageBlock in enumerate(splitImage):#780
         minDifference = 99999
         minCode = 0
 
@@ -86,16 +86,9 @@ if __name__ == '__main__':
                 minDifference = difference
                 minCode = i
 
-        minCodeList.append(minCode)
-
-
-    print("len(minCodeList)=",len(minCodeList))
-
-    out = ""
-    for i, v in enumerate(minCodeList):
         if i % lineSize == 0:
             out += "\n"
-        out += charSet[v]
+        out += charSet[minCode]
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
         file.write(out)

@@ -3,8 +3,6 @@ import textwrap
 
 from CodeSet import CodeSet
 
-import numpy as np
-
 
 def textToImageExample():  # Only Ascii
     # Source text, and wrap it.
@@ -36,7 +34,7 @@ def textToImageExample():  # Only Ascii
 def codeSetToImageGenerate(codeSet, size):
     fontSize = size
     codeImages = []
-    font = ImageFont.truetype(codeSet.fontPATH , fontSize, encoding="unicode")
+    font = ImageFont.truetype(codeSet.fontPATH, fontSize, encoding="unicode")
     fontColor = 0
     background = 255
     widthSize = size//2
@@ -72,9 +70,9 @@ def codeSetToImageGenerate(codeSet, size):
 
         #print(textSize, widthSize, size)
 
-        img.save("codeset/" + codeSet.name + "/" + char + ".png")
+        #img.save("codeset/" + codeSet.name + "/" + char + ".png")
 
-    print("textSize=", textSize, "fontSize=",fontSize)
+    #print("textSize=", textSize, "fontSize=", fontSize)
     # print(maxW, maxH,  minW ,minH )
     return codeImages
 
