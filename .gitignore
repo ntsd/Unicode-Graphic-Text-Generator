@@ -141,3 +141,5 @@ ENV/
 
 
 \.idea/
+
+Output\.txt
