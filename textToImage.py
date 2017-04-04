@@ -31,13 +31,12 @@ def textToImageExample():  # Only Ascii
     # img.save("seesharp.png")
 
 
-def codeSetToImageGenerate(codeSet, size):
-    fontSize = size
+def codeSetToImageGenerate(codeSet, widthSize, heightSize):
+    fontSize = widthSize
     codeImages = []
     font = ImageFont.truetype(codeSet.fontPATH, fontSize, encoding="unicode")
     fontColor = 0
     background = 255
-    widthSize = size//2
     # maxH = 0
     # maxW = 0
     # minH = 99
@@ -49,11 +48,11 @@ def codeSetToImageGenerate(codeSet, size):
         draw = ImageDraw.Draw(img)
         textSize = draw.textsize(char, font) #size w, h 10,5 in font unifont
 
-        if abs(textSize[0]-widthSize) > 3 or abs(textSize[1]-size) > 3:#to filter if size less than normal
-            continue
+        # if abs(textSize[0]-widthSize) > 3 or abs(textSize[1]-size) > 3:#to filter if size less than normal
+        #     continue
 
 
-        img = Image.new('L', (widthSize, size), background)
+        img = Image.new('L', (widthSize, heightSize), background)
         draw = ImageDraw.Draw(img)
         draw.text((0, 0), char, fontColor, font)
 
@@ -66,7 +65,7 @@ def codeSetToImageGenerate(codeSet, size):
 
 
         #print(size//2, size)
-        codeImages.append([imageArrays[widthSize*i:widthSize*i+widthSize] for i in range(size)])
+        codeImages.append([imageArrays[widthSize*i:widthSize*i+widthSize] for i in range(heightSize)])
 
         #print(textSize, widthSize, size)
 
