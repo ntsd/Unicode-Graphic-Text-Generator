@@ -61,6 +61,9 @@ def blockshaped(arr, nrows, ncols):
 if __name__ == '__main__':
     filename = askopenfilename()
     image = cv2.imread(filename, 0)
+
+    res = cv2.resize(image, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
+
     cv2.imshow("show gray scale", image)
     height, width = image.shape
     lineSize = width//2 #28 for Facebook
@@ -75,9 +78,9 @@ if __name__ == '__main__':
     # cv2.imshow("splitImage[0]", splitImage[1])
     # cv2.waitKey(0)
 
-    # charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]#range(0x2591, 0x2593)]
+    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]#range(0x2591, 0x2593)]
 
-    charArray = charSet.arail5x9
+    # charArray = charSet.arail5x9
 
     codeset = CodeSet.CodeSet("block", charArray, 'fonts/arial-unicode-ms.ttf')#unifont.ttf')
 
@@ -86,7 +89,7 @@ if __name__ == '__main__':
     print(len(splitImage), len(splitImage[0]), len(splitImage[0][0]))
     print(len(codeSetImageArrays), len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
 
-    out = textImageMatching.getClosetByDifferenceROI(codeSetImageArrays, charArray, splitImage, scaleHeight, scaleWidth, lineSize)
+    out = textImageMatching.getClosetByDifferencePixel(codeSetImageArrays, charArray, splitImage, scaleHeight, scaleWidth, lineSize)
 
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:

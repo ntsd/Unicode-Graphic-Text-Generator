@@ -95,6 +95,7 @@ def getMostFontSize(charCodeSet, codeSet, fontSize):
 
 if __name__ == '__main__':
 
+    charCodeSet = [chr(i)for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]
     charCodeSet = [chr(i) for i in range(10000)]#[0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]
     codeset = CodeSet("block", charCodeSet, 'fonts/arial.ttf')
     getMostFontSize(charCodeSet, codeset, 10)
