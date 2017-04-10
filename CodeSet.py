@@ -12,3 +12,4 @@ class CodeSet:
         self.charSet = charSet
         self.fontPATH = fontPATH
         self.blockSizeRange = blockSizeRange
+

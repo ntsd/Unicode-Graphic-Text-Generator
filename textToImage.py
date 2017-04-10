@@ -3,6 +3,8 @@ import textwrap
 
 from CodeSet import CodeSet
 
+from collections import Counter
+
 
 def textToImageExample():  # Only Ascii
     # Source text, and wrap it.
@@ -75,6 +77,25 @@ def codeSetToImageGenerate(codeSet, widthSize, heightSize):
     # print(maxW, maxH,  minW ,minH )
     return codeImages
 
+def getMostFontSize(charCodeSet, codeSet, fontSize):
+    font = ImageFont.truetype(codeSet.fontPATH, fontSize, encoding="unicode")
+    img = Image.new("RGBA", (1, 1))
+    draw = ImageDraw.Draw(img)
+    textSizeDict = {}
+    for c in charCodeSet:
+        textsize = draw.textsize(c*10, font)
+        try:
+            textSizeDict[textsize][0] += 1
+            textSizeDict[textsize][1].append(c)
+        except:
+            textSizeDict[textsize] = [1, [c]]
+
+    for i in textSizeDict:
+        print(i, textSizeDict[i])
+
 if __name__ == '__main__':
-    codeset = CodeSet("block", [chr(i) for i in range(0x2580, 0x259F)], 'fonts/unifont.ttf')
-    codeSetToImageGenerate(codeset, 10)
+
+    charCodeSet = [chr(i) for i in range(10000)]#[0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]
+    codeset = CodeSet("block", charCodeSet, 'fonts/arial.ttf')
+    getMostFontSize(charCodeSet, codeset, 10)
+

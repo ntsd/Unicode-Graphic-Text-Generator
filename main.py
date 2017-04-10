@@ -7,9 +7,13 @@ import time
 
 import io
 
-from CodeSet import CodeSet
+import CodeSet
 
 import textToImage
+
+import textImageMatching
+
+import charSet
 
 def timing(f):
     def wrap(*args):
@@ -59,7 +63,7 @@ if __name__ == '__main__':
     image = cv2.imread(filename, 0)
     cv2.imshow("show gray scale", image)
     height, width = image.shape
-    lineSize = width//3 #28 for Facebook
+    lineSize = width//2 #28 for Facebook
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
     print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
@@ -71,32 +75,19 @@ if __name__ == '__main__':
     # cv2.imshow("splitImage[0]", splitImage[1])
     # cv2.waitKey(0)
 
-    charSet = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593]]#range(0x2591, 0x2593)]
-    codeset = CodeSet("block", charSet, 'fonts/unifont.ttf')
+    # charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]#range(0x2591, 0x2593)]
+
+    charArray = charSet.arail5x9
+
+    codeset = CodeSet.CodeSet("block", charArray, 'fonts/arial-unicode-ms.ttf')#unifont.ttf')
 
     codeSetImageArrays = textToImage.codeSetToImageGenerate(codeset, scaleWidth, scaleHeight)
 
     print(len(splitImage), len(splitImage[0]), len(splitImage[0][0]))
     print(len(codeSetImageArrays), len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
 
-    out = ""
-    for index, imageBlock in enumerate(splitImage):#780
-        minDifference = 99999
-        minCode = 0
+    out = textImageMatching.getClosetByDifferenceROI(codeSetImageArrays, charArray, splitImage, scaleHeight, scaleWidth, lineSize)
 
-        for i, codeBlock in enumerate(codeSetImageArrays):#30
-            difference = 0
-            for row in range(scaleHeight):
-                for col in range(scaleWidth):
-                    difference += abs(imageBlock[row][col] - codeBlock[row][col])
-
-            if difference < minDifference:
-                minDifference = difference
-                minCode = i
-
-        if index % lineSize == 0:
-            out += "\n"
-        out += charSet[minCode]
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
         file.write(out)
