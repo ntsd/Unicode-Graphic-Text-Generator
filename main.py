@@ -96,8 +96,8 @@ if __name__ == '__main__':
     print(len(out))
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
-        #file.write(out.replace('░','█').replace(' ','░'))
-        file.write(out)
+        file.write(out.replace('░','█').replace(' ','░')) # for space not compress
+        #file.write(out)
 
     print('Done put anykey to stop')
     cv2.waitKey(0)
