@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     cv2.imshow("show gray scale", image)
     height, width = image.shape
-    lineSize = 39#width//2 #39 for Facebook
+    lineSize = 47#defult = width//2 #39 for Facebook 47 for markdown
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
     print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     #cv2.imshow("splitImage[0]", splitImage)
     # cv2.waitKey(0)
 
-    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593]] # http://www.unicodemap.org/range/53/Block_Elements/ # 0x0020 is space
+    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]] # http://www.unicodemap.org/range/53/Block_Elements/ # 0x0020 is space
 
     # charArray = charSet.arail5x9
 
@@ -96,6 +96,7 @@ if __name__ == '__main__':
     print(len(out))
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
+        #file.write(out.replace('░','█').replace(' ','░'))
         file.write(out)
 
     print('Done put anykey to stop')
