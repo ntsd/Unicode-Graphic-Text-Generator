@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     cv2.imshow("show gray scale", image)
     height, width = image.shape
-    lineSize = 47#defult = width//2 #39 for Facebook 47 for markdown
+    lineSize = 70#defult = width//2 #39 for Facebook 70 for markdown
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
     print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
