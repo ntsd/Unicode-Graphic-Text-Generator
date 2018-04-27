@@ -15,6 +15,8 @@ import textImageMatching
 
 import charSet
 
+import math
+
 def timing(f):
     def wrap(*args):
         time1 = time.time()
@@ -28,16 +30,17 @@ def cover_multiple(current_length, multiple):
     return ((current_length - 1) // multiple + 1) * multiple
 
 @timing
-def slicer(a, chunk_i, chunk_j, twoD=False):
+def slicer(a, chunk_i, chunk_j, lineSize, twoD=False):
     """
     :return Array of Arrays Rows of Array cols of Arrays of shape data will be nan if division != 0  y * x
     
     """
     n = cover_multiple(a.shape[0], chunk_i)
-    m = cover_multiple(a.shape[1], chunk_j)
+    m = lineSize*chunk_j#cover_multiple(a.shape[1], chunk_j)
+    print(n, m)
     c = np.empty((n, m))
     c.fill(255)#np.nan)
-    c[:a.shape[0], :a.shape[1]] = a
+    c[:a.shape[0], :m] = a[:a.shape[0], :m]
     c = c.reshape(n // chunk_i, chunk_i, m // chunk_j, chunk_j)
     c = c.transpose(0, 2, 1, 3)
     if not twoD:
@@ -62,23 +65,23 @@ if __name__ == '__main__':
     filename = askopenfilename()
     image = cv2.imread(filename, 0)
 
-    res = cv2.resize(image, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
+    #res = cv2.resize(image, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
 
     cv2.imshow("show gray scale", image)
     height, width = image.shape
-    lineSize = width//2 #28 for Facebook
+    lineSize = 39#width//2 #39 for Facebook
     scaleWidth = width//lineSize
     scaleHeight = scaleWidth*2
     print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
 
     #speed test
-    splitImage = slicer(image, scaleHeight, scaleWidth)
+    splitImage = slicer(image, scaleHeight, scaleWidth, lineSize)
 
-
-    # cv2.imshow("splitImage[0]", splitImage[1])
+    print('splitImage.shape',splitImage.shape)
+    #cv2.imshow("splitImage[0]", splitImage)
     # cv2.waitKey(0)
 
-    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]#range(0x2591, 0x2593)]
+    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593]] # http://www.unicodemap.org/range/53/Block_Elements/ # 0x0020 is space
 
     # charArray = charSet.arail5x9
 
@@ -86,15 +89,16 @@ if __name__ == '__main__':
 
     codeSetImageArrays = textToImage.codeSetToImageGenerate(codeset, scaleWidth, scaleHeight)
 
-    print(len(splitImage), len(splitImage[0]), len(splitImage[0][0]))
-    print(len(codeSetImageArrays), len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
+    print('codeSetImageArrays shape',len(codeSetImageArrays), len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
 
     out = textImageMatching.getClosetByDifferencePixel(codeSetImageArrays, charArray, splitImage, scaleHeight, scaleWidth, lineSize)
 
+    print(len(out))
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
         file.write(out)
 
+    print('Done put anykey to stop')
     cv2.waitKey(0)
     # print(len(l2[0]), len(l2[0][0]))
     # print(len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
