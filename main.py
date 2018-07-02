@@ -115,6 +115,7 @@ if __name__ == '__main__':
     print(len(out))
 
     with io.open("output.txt", 'w', encoding='utf-8') as file:
+        # list of emoji unicode https://unicode.org/emoji/charts/full-emoji-list.html
         file.write(out.replace('▓','💗').replace('░','😸').replace(' ','░')) # for space not compress .replace('░','█') to reduce noise better
         #file.write(out) 
 
