@@ -61,24 +61,28 @@ def blockshaped(arr, nrows, ncols):
 if __name__ == '__main__':
     filename = askopenfilename()
     image = cv2.imread(filename, 0)
-
-    res = cv2.resize(image, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
-
-    cv2.imshow("show gray scale", image)
+    
     height, width = image.shape
-    lineSize = width//2 #28 for Facebook
-    scaleWidth = width//lineSize
-    scaleHeight = scaleWidth*2
+    lineSize = 48 #//2 #28 for Facebook 106 for steam
+    scale = lineSize/width
+    new_height = round(height*scale)
+    new_width = lineSize
+    print('new_width:{} new_height:{}'.format(new_width, new_height))
+    thumbnail = cv2.resize(image, (new_width, new_height), interpolation = cv2.INTER_AREA)  #use for resize
+    cv2.imshow("show gray scale", thumbnail)
+
+    scaleWidth = 1
+    scaleHeight = 2
     print("size = ", width, "x",  height, " scale width = ", scaleWidth, " scale Height = ", scaleHeight)
 
     #speed test
-    splitImage = slicer(image, scaleHeight, scaleWidth)
+    splitImage = slicer(thumbnail, scaleHeight, scaleWidth)
 
 
     # cv2.imshow("splitImage[0]", splitImage[1])
     # cv2.waitKey(0)
 
-    charArray = [chr(i) for i in [0x2591, 0x2588, 0x2592, 0x2593, 0x0020]]#range(0x2591, 0x2593)]
+    charArray = [chr(i) for i in [0x2591, 0x2592, 0x2593]]#0x2591, 0x2588, 0x2592, 0x2593, 0x0020
 
     # charArray = charSet.arail5x9
 
@@ -96,6 +100,7 @@ if __name__ == '__main__':
         file.write(out)
 
     cv2.waitKey(0)
+
     # print(len(l2[0]), len(l2[0][0]))
     # print(len(codeSetImageArrays[0]), len(codeSetImageArrays[0][0]))
 
